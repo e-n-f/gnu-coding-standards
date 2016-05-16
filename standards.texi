@@ -260,6 +260,11 @@ has a significant chance of breaking any real programs or scripts,
 then it is not really upward compatible.  Try to redesign its
 interface.
 
+Many GNU programs suppress extensions that conflict with POSIX if the
+environment variable @code{POSIXLY_CORRECT} is defined (even if it is
+defined with a null value).  Please make your program recognize this
+variable if appropriate.
+
 When a feature is used only by users (not by programs or command
 files), and it is done poorly in Unix, feel free to replace it
 completely with something totally different and better.  (For example,
@@ -2194,6 +2199,10 @@ any previous version can see what is new.
 If the @file{NEWS} file gets very long, move some of the older items
 into a file named @file{ONEWS} and put a note at the end referring the
 user to that file.
+
+Please do not use the term ``pathname'' that is used in Unix
+documentation; use ``file name'' (two words) instead.  We use the term
+``path'' only for search paths, which are lists of file names.
 
 It is ok to supply a man page for the program as well as a Texinfo
 manual if you wish to.  But keep in mind that supporting a man page
