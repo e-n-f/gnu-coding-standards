@@ -3,7 +3,7 @@
 @setfilename standards.info
 @settitle GNU Coding Standards
 @c UPDATE THIS DATE WHENEVER YOU MAKE CHANGES!
-@set lastupdate 28 March 1994
+@set lastupdate 17 November 1994
 @c %**end of header
 
 @ifinfo
@@ -18,7 +18,7 @@ END-INFO-DIR-ENTRY
 
 @ifinfo
 GNU Coding Standards
-Copyright (C) 1992, 1993, 1994 Free Software Foundation
+Copyright (C) 1992, 1993, 1994 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -49,7 +49,7 @@ by the Free Software Foundation.
 @page
 
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1992, 1993 Free Software Foundation
+Copyright @copyright{} 1992, 1993 Free Software Foundation, Inc.
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -63,17 +63,18 @@ notice identical to this one.
 Permission is granted to copy and distribute translations of this manual
 into another language, under the above conditions for modified versions,
 except that this permission notice may be stated in a translation approved
-by Free Software Foundation.
+by the Free Software Foundation.
 @end titlepage
 
 @ifinfo
-@node Top, Reading Non-Free Code, (dir), (dir)
+@node Top, Preface, (dir), (dir)
 @top Version
 
 Last updated @value{lastupdate}.
 @end ifinfo
 
 @menu
+* Preface::			About the GNU Coding Standards
 * Reading Non-Free Code::	Referring to Proprietary Programs
 * Contributions::		Accepting Contributions
 * Change Logs::			Recording Changes
@@ -95,6 +96,26 @@ Last updated @value{lastupdate}.
 * Documentation::		Documenting Programs
 * Releases::			Making Releases
 @end menu
+
+@node Preface
+@chapter About the GNU Coding Standards
+
+The GNU Coding Standards were written by Richard Stallman and other GNU
+Project volunteers.  Their purpose is to make the GNU system clean,
+consistent, and easy to install.  This document can also be read as a
+guide to write portable, robust and reliable programs.  It focuses on
+programs written in C, but many of the rules and principles are useful
+even if you write in another programming language.  The rules often
+state reasons for writing in a certain way.
+
+Corrections or suggestions regarding this document should be sent to
+@code{gnu@@prep.ai.mit.edu}.  If you make a suggestion, please include a
+suggested new wording for it; our time is limited.  We prefer a context
+diff to the @file{standards.texi} or @file{make-stds.texi} files, but if
+you don't have those files, please mail your suggestion anyway.
+
+This release of the GNU Coding Standards was last updated
+@value{lastupdate}.
 
 @node Reading Non-Free Code
 @chapter Referring to Proprietary Programs
@@ -176,7 +197,8 @@ can help eliminate conceptual inconsistencies between different parts
 of a program; they can give you a history of how the conflicting
 concepts arose.
 
-Use the Emacs command @kbd{M-x add-change} to start a new entry in the
+Use the Emacs command @kbd{M-x add-change-log-entry} to start a new
+entry in the
 change log.  An entry should have an asterisk, the name of the changed
 file, and then in parentheses the name of the changed functions,
 variables or whatever, followed by a colon.  Then describe the changes
@@ -348,12 +370,11 @@ For example, a Sun 3 might be @samp{m68k-sun-sunos4.1}.
 
 The @code{configure} script needs to be able to decode all plausible
 alternatives for how to describe a machine.  Thus, @samp{sun3-sunos4.1}
-would be a valid alias.  So would @samp{sun3-bsd4.2}, since SunOS is
-basically @sc{BSD} and no other @sc{BSD} system is used on a Sun.  For many
-programs, @samp{vax-dec-ultrix} would be an alias for
-@samp{vax-dec-bsd}, simply because the differences between Ultrix and
-@sc{BSD} are rarely noticeable, but a few programs might need to distinguish
-them.
+would be a valid alias.  For many programs, @samp{vax-dec-ultrix} would
+be an alias for @samp{vax-dec-bsd}, simply because the differences
+between Ultrix and @sc{BSD} are rarely noticeable, but a few programs
+might need to distinguish them.
+@c Real 4.4BSD now runs on some Suns.
 
 There is a shell script called @file{config.sub} that you can use
 as a subroutine to validate system types and canonicalize aliases.
@@ -441,7 +462,6 @@ cross-operation is not a meaningful thing.
 Some programs have ways of configuring themselves automatically.  If
 your program is set up to do this, your @code{configure} script can simply
 ignore most of its arguments.
-
 
 @node Source Language
 @chapter Using Languages Other Than C
@@ -1008,6 +1028,12 @@ You must expect @code{free} to alter the contents of the block that was
 freed.  Anything you want to fetch from the block, you must fetch before
 calling @code{free}.
 
+If @code{malloc} fails in a noninteractive program, make that a fatal
+error.  In an interactive program (one that reads commands from the
+user), it is better to abort the command and return to the command
+reader loop.  This allows the user to kill other processes to free up
+virtual memory, and then try the command again.
+
 Use @code{getopt_long} to decode arguments, unless the argument syntax
 makes this unreasonable.
 
@@ -1248,12 +1274,6 @@ the requested information.
 
 @table @samp
 
-@item auto-check
-@samp{-a} in @code{recode}.
-
-@item auto-reference
-@samp{-A} in @code{ptx}.
-
 @item after-date
 @samp{-N} in @code{tar}.
 
@@ -1274,6 +1294,9 @@ and @code{unexpand}.
 @item archive
 @samp{-a} in @code{cp}.
 
+@item archive-name
+@samp{-n} in @code{shar}.
+
 @item arglength
 @samp{-l} in @code{m4}.
 
@@ -1286,8 +1309,23 @@ and @code{unexpand}.
 @item assume-old
 @samp{-o} in Make.
 
+@item auto-check
+@samp{-a} in @code{recode}.
+
+@item auto-pager
+@samp{-a} in @code{wdiff}.
+
+@item auto-reference
+@samp{-A} in @code{ptx}.
+
+@item avoid-wraps
+@samp{-n} in @code{wdiff}.
+
 @item backward-search
-@samp{-B} in etags.
+@samp{-B} in @code{ctags}.
+
+@item basename
+@samp{-f} in @code{shar}.
 
 @item batch
 Used in GDB.
@@ -1300,6 +1338,9 @@ Used in GDB.
 
 @item binary
 @samp{-b} in @code{cpio} and @code{diff}.
+
+@item bits-per-code
+@samp{-b} in @code{shar}.
 
 @item block-size
 Used in @code{cpio} and @code{tar}.
@@ -1316,7 +1357,7 @@ Used in various programs to make output shorter.
 @item bytes
 @samp{-c} in @code{head}, @code{split}, and @code{tail}.
 
-@item c++
+@item c@t{++}
 @samp{-C} in @code{etags}.
 
 @item catenate
@@ -1342,7 +1383,7 @@ Used in various programs to specify the directory to use.
 @samp{-d} in @code{tar}.
 
 @item compress
-@samp{-Z} in @code{tar}.
+@samp{-Z} in @code{tar} and @code{shar}.
 
 @item concatenate
 @samp{-A} in @code{tar}.
@@ -1354,7 +1395,7 @@ Used in various programs to specify the directory to use.
 Used in @code{diff}.
 
 @item copyright
-@samp{-C} in @code{ptx} and @code{recode}.
+@samp{-C} in @code{ptx}, @code{recode}, and @code{wdiff}.
 
 @item core
 Used in GDB.
@@ -1368,8 +1409,11 @@ Used in GDB.
 @item create
 Used in @code{tar} and @code{cpio}.
 
+@item cut-mark
+@samp{-c} in @code{shar}.
+
 @item cxref
-@samp{-x} in @code{etags}.
+@samp{-x} in @code{ctags}.
 
 @item date
 @samp{-d} in @code{touch}.
@@ -1382,7 +1426,7 @@ Used in @code{tar} and @code{cpio}.
 @samp{-D} in @code{m4}.
 
 @item defines
-@samp{-d} in Bison and @code{etags}.
+@samp{-d} in Bison and @code{ctags}.
 
 @item delete
 @samp{-D} in @code{tar}.
@@ -1418,9 +1462,6 @@ specially.
 @item discard-locals
 @samp{-X} in @code{strip}.
 
-@item diversions
-@samp{-N} in @code{m4}.
-
 @item dry-run
 @samp{-n} in Make.
 
@@ -1429,6 +1470,12 @@ specially.
 
 @item elide-empty-files
 @samp{-z} in @code{csplit}.
+
+@item end-delete
+@samp{-x} in @code{wdiff}.
+
+@item end-insert
+@samp{-z} in @code{wdiff}.
 
 @item entire-new-file
 @samp{-N} in @code{diff}.
@@ -1460,6 +1507,9 @@ Used in GDB.
 @item exit
 @samp{-x} in @code{xargs}.
 
+@item exit-0
+@samp{-e} in @code{unshar}.
+
 @item expand-tabs
 @samp{-t} in @code{diff}.
 
@@ -1478,6 +1528,9 @@ Used in GDB.
 
 @item fast
 @samp{-f} in @code{su}.
+
+@item fatal-warnings
+@samp{-E} in @code{m4}.
 
 @item file
 @samp{-f} in @code{info}, Make, @code{mt}, and @code{tar};
@@ -1511,11 +1564,14 @@ Used in Makeinfo.
 @item force
 @samp{-f} in @code{cp}, @code{ln}, @code{mv}, and @code{rm}.
 
+@item force-prefix
+@samp{-F} in @code{shar}.
+
 @item format
 Used in @code{ls}, @code{time}, and @code{ptx}.
 
-@item forward-search
-@samp{-F} in @code{etags}.
+@item freeze-state
+@samp{-F} in @code{m4}.
 
 @item fullname
 Used in GDB.
@@ -1536,7 +1592,7 @@ Used in GDB.
 @samp{-g} in @code{install}.
 
 @item gzip
-@samp{-z} in @code{tar}.
+@samp{-z} in @code{tar} and @code{shar}.
 
 @item hashsize
 @samp{-H} in @code{m4}.
@@ -1549,6 +1605,9 @@ Used in GDB.
 
 @item help
 Used to ask for brief usage information.
+
+@item here-delimiter
+@samp{-d} in @code{shar}.
 
 @item hide-control-chars
 @samp{-q} in @code{ls}.
@@ -1574,7 +1633,7 @@ Used to ask for brief usage information.
 
 @item ignore-case
 @samp{-f} in @code{look} and @code{ptx};
-@samp{-i} in @code{diff}.
+@samp{-i} in @code{diff} and @code{wdiff}.
 
 @item ignore-errors
 @samp{-i} in Make.
@@ -1628,6 +1687,9 @@ Used to ask for brief usage information.
 @samp{-p} in @code{xargs};
 @samp{-w} in @code{tar}.
 
+@item intermix-type
+@samp{-p} in @code{shar}.
+
 @item jobs
 @samp{-j} in Make.
 
@@ -1642,6 +1704,15 @@ Used to ask for brief usage information.
 
 @item kilobytes
 @samp{-k} in @code{du} and @code{ls}.
+
+@item language
+@samp{-l} in @code{etags}.
+
+@item less-mode
+@samp{-l} in @code{wdiff}.
+
+@item level-for-gzip
+@samp{-g} in @code{shar}.
 
 @item line-bytes
 @samp{-C} in @code{split}.
@@ -1712,6 +1783,9 @@ Used in GDB.
 @item minimal
 @samp{-d} in @code{diff}.
 
+@item mixed-uuencode
+@samp{-M} in @code{shar}.
+
 @item mode
 @samp{-m} in @code{install}, @code{mkdir}, and @code{mkfifo}.
 
@@ -1724,11 +1798,26 @@ Used in GDB.
 @item name-prefix
 @samp{-a} in Bison.
 
+@item nesting-limit
+@samp{-L} in @code{m4}.
+
+@item net-headers
+@samp{-a} in @code{shar}.
+
 @item new-file
 @samp{-W} in Make.
 
 @item no-builtin-rules
 @samp{-r} in Make.
+
+@item no-character-count
+@samp{-w} in @code{shar}.
+
+@item no-check-existing
+@samp{-x} in @code{shar}.
+
+@item no-common
+@samp{-3} in @code{wdiff}.
 
 @item no-create
 @samp{-c} in @code{touch}.
@@ -1736,8 +1825,14 @@ Used in GDB.
 @item no-defines
 @samp{-D} in @code{etags}.
 
+@item no-deleted
+@samp{-1} in @code{wdiff}.
+
 @item no-dereference
 @samp{-d} in @code{cp}.
+
+@item no-inserted
+@samp{-2} in @code{wdiff}.
 
 @item no-keep-going
 @samp{-S} in Make.
@@ -1745,8 +1840,14 @@ Used in GDB.
 @item no-lines
 @samp{-l} in Bison.
 
+@item no-piping
+@samp{-P} in @code{shar}.
+
 @item no-prof
 @samp{-e} in @code{gprof}.
+
+@item no-regex
+@samp{-R} in @code{etags}.
 
 @item no-sort
 @samp{-p} in @code{nm}.
@@ -1759,6 +1860,9 @@ Used in Makeinfo.
 
 @item no-time
 @samp{-E} in @code{gprof}.
+
+@item no-timestamp
+@samp{-m} in @code{shar}.
 
 @item no-validate
 Used in Makeinfo.
@@ -1817,8 +1921,14 @@ Used in GDB.
 @item output
 In various programs, specify the output file name.
 
+@item output-prefix
+@samp{-o} in @code{shar}.
+
 @item override
 @samp{-o} in @code{rm}.
+
+@item overwrite
+@samp{-c} in @code{unshar}.
 
 @item owner
 @samp{-o} in @code{install}.
@@ -1883,6 +1993,12 @@ Used in @code{tar} and @code{cp}.
 @item print-symdefs
 @samp{-s} in @code{nm}.
 
+@item printer
+@samp{-p} in @code{wdiff}.
+
+@item query-user
+@samp{-X} in @code{shar}.
+
 @item question
 @samp{-q} in Make.
 
@@ -1890,6 +2006,9 @@ Used in @code{tar} and @code{cp}.
 Used in many programs to inhibit the usual output.  @strong{Note:} every
 program accepting @samp{--quiet} should accept @samp{--silent} as a
 synonym.
+
+@item quiet-unshar
+@samp{-Q} in @code{shar}
 
 @item quote-name
 @samp{-Q} in @code{ls}.
@@ -1920,10 +2039,13 @@ Used in Makeinfo.
 @samp{-r} in @code{ptx}.
 
 @item regex
-@samp{-r} in @code{tac}.
+@samp{-r} in @code{tac} and @code{etags}.
 
 @item release
 @samp{-r} in @code{uname}.
+
+@item reload-state
+@samp{-R} in @code{m4}.
 
 @item relocation
 @samp{-r} in @code{objdump}.
@@ -2008,12 +2130,30 @@ Used in @code{ls}.
 @item speed-large-files
 @samp{-H} in @code{diff}.
 
+@item split-at
+@samp{-E} in @code{unshar}.
+
+@item split-size-limit
+@samp{-L} in @code{shar}.
+
 @item squeeze-blank
 @samp{-s} in @code{cat}.
+
+@item start-delete
+@samp{-w} in @code{wdiff}.
+
+@item start-insert
+@samp{-y} in @code{wdiff}.
 
 @item starting-file
 Used in @code{tar} and @code{diff} to specify which file within
 a directory to start processing with.
+
+@item statistics
+@samp{-s} in @code{wdiff}.
+
+@item stdin-file-list
+@samp{-S} in @code{shar}.
 
 @item stop
 @samp{-S} in Make.
@@ -2029,6 +2169,9 @@ a directory to start processing with.
 
 @item strip-debug
 @samp{-S} in @code{strip}.
+
+@item submitter
+@samp{-s} in @code{shar}.
 
 @item suffix
 @samp{-S} in @code{cp}, @code{ln}, @code{mv}.
@@ -2062,9 +2205,13 @@ Used in GDB and @code{objdump}.
 
 @item terminal
 @samp{-T} in @code{tput} and @code{ul}.
+@samp{-t} in @code{wdiff}.
 
 @item text
 @samp{-a} in @code{diff}.
+
+@item text-files
+@samp{-T} in @code{shar}.
 
 @item time
 Used in @code{ls} and @code{touch}.
@@ -2089,10 +2236,10 @@ Used in @code{ls} and @code{touch}.
 Used in GDB.
 
 @item typedefs
-@samp{-t} in @code{etags}.
+@samp{-t} in @code{ctags}.
 
 @item typedefs-and-c++
-@samp{-T} in @code{etags}.
+@samp{-T} in @code{ctags}.
 
 @item typeset-mode
 @samp{-t} in @code{ptx}.
@@ -2110,7 +2257,13 @@ Used in GDB.
 @samp{-u} in @code{nm}.
 
 @item update
-@samp{-u} in @code{cp}, @samp{etags}, @samp{mv}, @samp{tar}.
+@samp{-u} in @code{cp}, @code{ctags}, @code{mv}, @code{tar}.
+
+@item uuencode
+@samp{-B} in @code{shar}.
+
+@item vanilla-operation
+@samp{-V} in @code{shar}.
 
 @item verbose
 Print more information about progress.  Many programs support this.
@@ -2125,13 +2278,16 @@ Print the version number.
 @samp{-V} in @code{cp}, @code{ln}, @code{mv}.
 
 @item vgrind
-@samp{-v} in @code{etags}.
+@samp{-v} in @code{ctags}.
 
 @item volume
 @samp{-V} in @code{tar}.
 
 @item what-if
 @samp{-W} in Make.
+
+@item whole-size-limit
+@samp{-l} in @code{shar}.
 
 @item width
 @samp{-w} in @code{ls} and @code{ptx}.
